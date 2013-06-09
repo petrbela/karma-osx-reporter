@@ -10,7 +10,7 @@ var util = require('util');
 var spawn = require('child_process').spawn;
 var path = require('path');
 var http = require('http');
-var root = path.dirname(__dirname);
+var root = __dirname;
 var osxNotifier = {};
 
 var config_osx = {
@@ -23,7 +23,7 @@ var OSXReporter = function(helper, logger) {
 
   // Start local server that will send messages to Notification Center
   var center = spawn(path.join(root, "/node_modules/node-osx-notifier/lib/node-osx-notifier.js"), [config_osx.port, config_osx.host]);
-  log.debug("Notification center started..");
+  log.info("OSX Notification Center reporter started at http://%s:%s", config_osx.host, config_osx.port);
   center.on('exit', function(code) {
       log.info('node-osx-notifier exited with code ' + code);
   });
