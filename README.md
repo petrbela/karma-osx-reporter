@@ -11,17 +11,16 @@ For more information on Karma see the [homepage].
 
 ## Installation
 
-1. Install the plugin `npm install -g karma-osx-notifier`.
+1\. Install the plugin `npm install -g karma-osx-notifier`.
 
-
-2. Add dependency to the plugin section in Karma config file
+2\. Add dependency to the plugin section in Karma config file:
 
 ```js
   plugins = [
     'karma-osx-reporter'
   ];
 ```
-or
+or, if you're using the new module-based config file format:
 
 ```js
   karma.configure({
@@ -32,9 +31,8 @@ or
     ...
   })
 ```
-if you're using the new module-based config file format.
 
-3. Define it as a reporter in the config file
+3\. Define it as a reporter in the config file
 
 ```js
   reporters = ['osx']
