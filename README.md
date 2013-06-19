@@ -11,7 +11,7 @@ For more information on Karma see the [homepage].
 
 ## Installation
 
-1\. Install the plugin `npm install -g karma-osx-notifier`.
+1\. Install the plugin `npm install -g karma-osx-reporter`.
 
 2\. Add dependency to the plugin section in Karma config file:
 
