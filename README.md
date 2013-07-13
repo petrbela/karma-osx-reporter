@@ -11,20 +11,22 @@ For more information on Karma see the [homepage].
 
 ## Installation
 
-0. Make sure you're using Karma 0.9+ `karma --version`. You may install the latest (unstable) version using `npm install -g karma@canary`
+1. Make sure you're using Karma 0.9+ `karma --version`. You may install the latest (unstable) version using `npm install -g karma@canary`.
 
-1. Install the plugin `npm install -g karma-osx-reporter`.
+2. Install the plugin `npm install -g karma-osx-reporter`.
 
-2. Add dependency to the plugin section in Karma config file (Karma 0.9.0 - 0.9.2):
+3. Add dependency to the plugin section in Karma config file (Karma 0.9.0 - 0.9.2):
 
-```js
+  ```js
   plugins = [
     'karma-osx-reporter'
   ];
-```
-or, if you're using the new module-based config file format (Karma 0.9.3+):
 
-```js
+  ```
+
+  or, if you're using the new module-based config file format (Karma 0.9.3+):
+
+  ```js
   karma.configure({
     ...
     plugins: [
@@ -32,20 +34,19 @@ or, if you're using the new module-based config file format (Karma 0.9.3+):
     ],
     ...
   })
-```
+  ```
 
-4\. Define it as a reporter in the config file
+4. Define it as a reporter in the config file
 
-```js
-  reporters = ['osx']
-```
+  ```js
+  reporters: ['osx']
+  ```
 
-or pass through the command line
+  or pass through the command line
 
-```bash
+  ```sh
   $ karma start --reporters osx karma.conf.js
-```
-
+  ```
 
 
 ## License
