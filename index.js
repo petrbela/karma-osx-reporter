@@ -72,6 +72,37 @@ var OSXReporter = function(helper, logger) {
     
     req.end();
   };
+
+  this.onRunComplete = function(browsers, results) {
+    if (browsers.length > 1 && !results.disconnected) {
+      var str_request = null,
+          title = null,
+          message = null;
+
+      if (!results.failed && !results.error) {
+        str_request = 'pass';
+        title = util.format('TOTAL PASSED: %s', results.success);
+        message = util.format('All %d tests passed.', results.success);
+      } else {
+        str_request = 'fail';
+        title = util.format('TOTAL FAILED: %s', results.success);
+        message = util.format('%d/%d tests failed.', results.failed, results.failed+results.success);
+      }
+
+      var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
+      var options = {
+        host: config_osx.host,
+        port: config_osx.port,
+        path: uri,
+        method: 'GET'
+      };
+      var req = http.request(options, null);
+      req.on('error', function(err) {
+        log.error('error: ' + err.message);
+      });    
+      req.end();
+    }
+  };
 };
 
 OSXReporter.$inject = ['helper', 'logger'];
