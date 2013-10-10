@@ -27,7 +27,7 @@ For more information on Karma see the [homepage].
     ```js
     "devDependencies": {
       "karma": ">=0.9",
-      "karma-osx-notifier": "*"
+      "karma-osx-reporter": "*"
     }
     ```
 
