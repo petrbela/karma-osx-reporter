@@ -105,6 +105,11 @@ var OSXReporter = function(helper, logger) {
   };
 };
 
+if (process.platform !== 'darwin') {
+  // overwrite reporter with void function for non-OSX
+  OSXReporter = function(helper, logger) {}
+}
+
 OSXReporter.$inject = ['helper', 'logger'];
 
 // PUBLISH DI MODULE
