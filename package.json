@@ -1,6 +1,6 @@
 {
   "name": "karma-osx-reporter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Karma plugin. Report results with OSX Notification Center.",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "keywords": [
     "karma-plugin",
-    "reporter",
+    "karma-reporter",
     "osx",
     "notification center"
   ],
