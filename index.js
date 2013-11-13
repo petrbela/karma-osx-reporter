@@ -54,7 +54,7 @@ var OSXReporter = function(helper, logger) {
       message = util.format('%d tests passed in %s.', results.success, time);
     }
 
-    var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
+    var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message) + "&activate=" + encodeURIComponent('com.apple.Terminal');
     var options = {
       host: config_osx.host,
       port: config_osx.port,
