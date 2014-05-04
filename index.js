@@ -1,25 +1,18 @@
-//Manage notification center in osx
-//Based on https://npmjs.org/package/node-osx-notifier
-//Configuration sample:
-// osxNotifications = {
-//   notify: true,
-//   host: "localhost",  //Defaults to localhost
-//   port: 1337 //defaults to 1337
-// };
 var util = require('util');
 var spawn = require('child_process').spawn;
 var path = require('path');
 var http = require('http');
 var root = __dirname;
-var osxNotifier = {};
 
 var config_osx = {
   host: "localhost",
   port: 1337
 }
 
-var OSXReporter = function(helper, logger) {
+var OSXReporter = function(helper, logger, config) {
   var log = logger.create('reporter.osx');
+
+  extend(config_osx, config.osxReporter);
 
   // Start local server that will send messages to Notification Center
   var center = spawn(path.join(root, "/node_modules/node-osx-notifier/lib/node-osx-notifier.js"), [config_osx.port, config_osx.host]);
@@ -31,13 +24,19 @@ var OSXReporter = function(helper, logger) {
   this.adapters = [];
 
   this.onBrowserComplete = function(browser) {
-    var results = browser.lastResult;
+    report(browser.lastResult, browser);
+  };
+
+  this.onRunComplete = function(browsers, results) {
+    if (browsers.length <= 1 || results.disconnected) { return; }
+
+    report(results);
+  };
+
+  function report(results, browser) {
+    var str_request, title, message;
     var time = helper.formatTimeInterval(results.totalTime);
 
-    var str_request = null,
-        title = null,
-        message = null;
-    
     if (results.disconnected || results.error) {
       str_request = 'fail';
       title = util.format('ERROR - %s', browser.name);
@@ -45,16 +44,33 @@ var OSXReporter = function(helper, logger) {
     }
     else if (results.failed) {
       str_request = 'fail';
-      title = util.format('FAILED - %s', browser.name);
-      message = util.format('%d/%d tests failed in %s.', results.failed, results.total, time);
-    }
-    else {
+      if (browser) {
+        title = util.format('FAILED - %s', browser.name);
+        message = util.format('%d/%d tests failed in %s.', results.failed, results.total, time);
+      } else {
+        title = util.format('TOTAL FAILED: %s', results.failed);
+        message = util.format('%d/%d tests failed', results.failed, results.success + results.failed);
+      }
+    } else {
       str_request = 'pass';
-      title = util.format('PASSED - %s', browser.name);
-      message = util.format('%d tests passed in %s.', results.success, time);
+      if (browser) {
+        title = util.format('PASSED - %s', browser.name);
+        message = util.format('%d tests passed in %s.', results.success, time);
+      } else {
+        title = util.format('TOTAL PASSED: %s', results.success);
+        message = util.format('%d tests passed.', results.success);
+      }
     }
 
     var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
+
+    Object.keys(config_osx).forEach(function(key) {
+      if (key !== 'host' && key !== 'port') {
+        var value = typeof config_osx[key] === 'function' ? config_osx[key](results, browser) : config_osx[key];
+        uri += '&' + key + '=' + encodeURIComponent(value);
+      }
+    });
+
     var options = {
       host: config_osx.host,
       port: config_osx.port,
@@ -62,47 +78,12 @@ var OSXReporter = function(helper, logger) {
       method: 'GET'
     };
 
-    log.debug("Sending request to osx notification center.");
-
     var req = http.request(options, null);
-
     req.on('error', function(err) {
       log.error('error: ' + err.message);
     });
-    
     req.end();
-  };
-
-  this.onRunComplete = function(browsers, results) {
-    if (browsers.length > 1 && !results.disconnected) {
-      var str_request = null,
-          title = null,
-          message = null;
-
-      if (!results.failed && !results.error) {
-        str_request = 'pass';
-        title = util.format('TOTAL PASSED: %s', results.success);
-        message = util.format('All %d tests passed.', results.success);
-      } else {
-        str_request = 'fail';
-        title = util.format('TOTAL FAILED: %s', results.success);
-        message = util.format('%d/%d tests failed.', results.failed, results.failed+results.success);
-      }
-
-      var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
-      var options = {
-        host: config_osx.host,
-        port: config_osx.port,
-        path: uri,
-        method: 'GET'
-      };
-      var req = http.request(options, null);
-      req.on('error', function(err) {
-        log.error('error: ' + err.message);
-      });    
-      req.end();
-    }
-  };
+  }  
 };
 
 if (process.platform !== 'darwin') {
@@ -110,9 +91,22 @@ if (process.platform !== 'darwin') {
   OSXReporter = function(helper, logger) {}
 }
 
-OSXReporter.$inject = ['helper', 'logger'];
+OSXReporter.$inject = ['helper', 'logger', 'config'];
 
 // PUBLISH DI MODULE
 module.exports = {
   'reporter:osx': ['type', OSXReporter]
 };
+
+
+function extend(obj) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    if (source) {
+      for (var prop in source) {
+        obj[prop] = source[prop];
+      }
+    }
+  }
+  return obj;
+}

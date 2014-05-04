@@ -43,7 +43,7 @@ For more information on Karma see the [homepage].
   In any case, the plugin needs to be installed as a peer dependency to Karma (i.e. in the sibling folder). This just means you cannot use global Karma with local plugins or vice-versa.
 
 
-3. Add it as a reporter in the config file
+2. Add it as a reporter in the config file
 
   ```js
   reporters: ['progress', 'osx']
@@ -54,6 +54,47 @@ For more information on Karma see the [homepage].
   ```sh
   $ karma start --reporters=progress,osx karma.conf.js
   ```
+
+## Configuration
+
+OSX Notifier runs on localhost:1337 by default. If you need to change that, simply override it in the config.
+
+```js
+config.set({
+  ...
+
+  osxReporter: {
+    host: "localhost",
+    port: 1337
+  }
+
+  ...
+});
+```
+
+Any additional parameter will be passed to [node-osx-notifier](https://github.com/azoff/node-osx-notifier). Check the documentation for details. Some examples:
+
+```js
+config.set({
+  osxReporter: {
+    activate: 'com.apple.Terminal',
+    open: 'http://google.com',
+    execute: 'open .'
+  }
+});
+```
+
+To decide dynamically what to pass into these options, define them as functions:
+
+```js
+config.set({
+  osxReporter: {
+    activate: function(results, browser) {
+      return results.failed > 0 ? 'com.apple.Terminal' : 'com.apple.Safari';
+    }
+  }
+});
+```
 
 
 ## License
