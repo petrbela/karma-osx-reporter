@@ -1,6 +1,6 @@
 {
   "name": "karma-osx-reporter",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "A Karma plugin. Report results with OSX Notification Center.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,10 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/petrbela/karma-osx-reporter.git"
+  },
+  "bugs": {
+    "url": "http://github.com/petrbela/karma-osx-reporter/issues",
+    "email": "github@petrbela.com"
   },
   "keywords": [
     "karma-plugin",
