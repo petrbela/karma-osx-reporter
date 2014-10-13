@@ -18,11 +18,13 @@
     "karma-plugin",
     "karma-reporter",
     "osx",
+    "ubuntu",
     "notification center"
   ],
   "author": "Petr Bela <github@petrbela.com>",
-  "dependencies": {
-    "node-osx-notifier": ">= 0.1.0"
+  "optionalDependencies": {
+    "node-osx-notifier": ">= 0.1.0",
+    "dbus-native": "0.1.0"
   },
   "peerDependencies": {
     "karma": ">=0.9"

@@ -46,13 +46,13 @@ For more information on Karma see the [homepage].
 2. Add it as a reporter in the config file
 
   ```js
-  reporters: ['progress', 'osx']
+  reporters: ['progress', 'notification']
   ```
 
   or pass through the command line
 
   ```sh
-  $ karma start --reporters=progress,osx karma.conf.js
+  $ karma start --reporters=progress,notification karma.conf.js
   ```
 
 ## Configuration
