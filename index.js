@@ -10,7 +10,8 @@ var config_osx = {
 }
 
 var OSXReporter = function(helper, logger, config) {
-  var log = logger.create('reporter.osx');
+  var log = logger.create('reporter.osx'),
+    lastResult;
 
   extend(config_osx, config.osxReporter);
 
@@ -32,6 +33,42 @@ var OSXReporter = function(helper, logger, config) {
 
     report(results);
   };
+  
+  function showNotification(result) {
+    var show = false;
+
+    // If this is the first run `lastResult` will be undefined and we show
+    // the notification to confirm that the process is running.
+    if (lastResult === undefined) {
+      lastResult = result;
+      return true;
+    }
+
+    switch (config.osxReporter.notificationMode) {
+      case 'always':
+        show = true;
+        break;
+
+      case 'change':
+        show = result !== lastResult;
+        break;
+
+      case 'failChange':
+        if (result === 'fail' || (result === 'pass' && lastResult === 'fail')) {
+          show = true;
+        }
+        break;
+
+      case 'failOnly':
+        show = result === 'fail';
+        break;
+
+      default: show = true;
+    }
+
+    lastResult = result;
+    return show;
+  }
 
   function report(results, browser) {
     var str_request, title, message;
@@ -62,14 +99,16 @@ var OSXReporter = function(helper, logger, config) {
       }
     }
 
-    var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
+    if (showNotification(str_request)) {
+      var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
 
-    Object.keys(config_osx).forEach(function(key) {
-      if (key !== 'host' && key !== 'port') {
-        var value = typeof config_osx[key] === 'function' ? config_osx[key](results, browser) : config_osx[key];
-        uri += '&' + key + '=' + encodeURIComponent(value);
-      }
-    });
+      Object.keys(config_osx).forEach(function(key) {
+        if (key !== 'host' && key !== 'port') {
+          var value = typeof config_osx[key] === 'function' ? config_osx[key](results, browser) : config_osx[key];
+          uri += '&' + key + '=' + encodeURIComponent(value);
+        }
+      });
+    }
 
     var options = {
       host: config_osx.host,
