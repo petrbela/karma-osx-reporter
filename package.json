@@ -1,6 +1,6 @@
 {
   "name": "karma-osx-reporter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Karma plugin. Report results with OSX Notification Center.",
   "main": "index.js",
   "scripts": {
@@ -27,5 +27,11 @@
   "peerDependencies": {
     "karma": ">=0.9"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "0.0.17",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-conventional-changelog": "^1.1.0"
+  }
 }
