@@ -6,7 +6,7 @@
 
 Built on top of [node-osx-notifier] and based on [AvnerCohen's code].
 
-Only works with **Karma 0.9 or later** which enables custom plugins.
+Works with **Karma 0.9 or later**.
 
 For more information on Karma see the [homepage].
 
@@ -57,20 +57,35 @@ For more information on Karma see the [homepage].
 
 ## Configuration
 
-OSX Notifier runs on localhost:1337 by default. If you need to change that, simply override it in the config.
+### Host and Port
+
+OSX Notifier runs on localhost:1337 by default. If you need to change that, simply override it in the Karma config file.
 
 ```js
 config.set({
-  ...
-
   osxReporter: {
     host: "localhost",
     port: 1337
   }
-
-  ...
 });
 ```
+
+### Notification Mode
+
+- `always` - always show a notification
+- `change` - show a notification when the current result is different than the last
+- `failOnly` - show a notification if the result is fail
+- `failChange` - show a notification when the result is fail or first success after fail
+
+```js
+config.set({
+  osxReporter: {
+    notificationMode: 'always'
+  }
+})
+```
+
+### Additional Options
 
 Any additional parameter will be passed to [node-osx-notifier](https://github.com/azoff/node-osx-notifier). Check the documentation for details. Some examples:
 

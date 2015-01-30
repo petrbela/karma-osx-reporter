@@ -7,11 +7,11 @@ var root = __dirname;
 var config_osx = {
   host: "localhost",
   port: 1337
-}
+};
 
 var OSXReporter = function(helper, logger, config) {
   var log = logger.create('reporter.osx'),
-    lastResult;
+      lastResult;
 
   extend(config_osx, config.osxReporter);
 
@@ -44,7 +44,7 @@ var OSXReporter = function(helper, logger, config) {
       return true;
     }
 
-    switch (config.osxReporter.notificationMode) {
+    switch (config_osx.notificationMode) {
       case 'always':
         show = true;
         break;
@@ -71,7 +71,7 @@ var OSXReporter = function(helper, logger, config) {
   }
 
   function report(results, browser) {
-    var str_request, title, message;
+    var str_request, title, message, uri;
     var time = helper.formatTimeInterval(results.totalTime);
 
     if (results.disconnected || results.error) {
@@ -100,7 +100,7 @@ var OSXReporter = function(helper, logger, config) {
     }
 
     if (showNotification(str_request)) {
-      var uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
+      uri = '/' + str_request + "?title=" + encodeURIComponent(title) + "&message=" + encodeURIComponent(message);
 
       Object.keys(config_osx).forEach(function(key) {
         if (key !== 'host' && key !== 'port') {
@@ -122,12 +122,12 @@ var OSXReporter = function(helper, logger, config) {
       log.error('error: ' + err.message);
     });
     req.end();
-  }  
+  }
 };
 
 if (process.platform !== 'darwin') {
   // overwrite reporter with void function for non-OSX
-  OSXReporter = function(helper, logger) {}
+  OSXReporter = function(helper, logger) {};
 }
 
 OSXReporter.$inject = ['helper', 'logger', 'config'];
