@@ -17,26 +17,26 @@ For more information on Karma see the [homepage].
 
   a. Globally. System-wide with `karma` available on command line.
 
-    ```sh
-    npm install -g karma
-    npm install -g karma-osx-reporter
-    ```
+```sh
+npm install -g karma
+npm install -g karma-osx-reporter
+```
 
   b. Locally to your project (preferred). Simply run:
 
-    ```sh
-    npm install karma --save-dev
-    npm install karma-osx-reporter --save-dev
-    ```
+```sh
+npm install karma --save-dev
+npm install karma-osx-reporter --save-dev
+```
 
     or add the dependencies to `package.json` manually and run `npm install`:
 
-    ```js
-    "devDependencies": {
-      "karma": ">=0.9",
-      "karma-osx-reporter": "*"
-    }
-    ```
+```js
+"devDependencies": {
+  "karma": ">=0.9",
+  "karma-osx-reporter": "*"
+}
+```
 
     If you install locally, you'll need to run Karma using `node_modules/karma/bin/karma`.
 
@@ -45,15 +45,15 @@ For more information on Karma see the [homepage].
 
 2. Add it as a reporter in the config file
 
-  ```js
-  reporters: ['progress', 'osx']
-  ```
+```js
+reporters: ['progress', 'osx']
+```
 
   or pass through the command line
 
-  ```sh
-  $ karma start --reporters=progress,osx karma.conf.js
-  ```
+```sh
+$ karma start --reporters=progress,osx karma.conf.js
+```
 
 ## Configuration
 
