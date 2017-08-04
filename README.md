@@ -13,47 +13,27 @@ For more information on Karma see the [homepage].
 
 ## Installation
 
-1. Install Karma and karma-osx-reporter plugin.
+### 1. Install Karma and karma-osx-reporter plugin.
 
-  a. Globally. System-wide with `karma` available on command line.
+After [installing Karma](http://karma-runner.github.io/1.0/intro/installation.html), run
 
-    ```sh
-    npm install -g karma
-    npm install -g karma-osx-reporter
-    ```
+```sh
+npm install karma-osx-reporter --save-dev
+# or, if using yarn
+yarn add karma-osx-reporter
+```
 
-  b. Locally to your project (preferred). Simply run:
+### 2. Add it as a reporter in the config file
 
-    ```sh
-    npm install karma --save-dev
-    npm install karma-osx-reporter --save-dev
-    ```
+```js
+reporters: ['progress', 'osx']
+```
 
-    or add the dependencies to `package.json` manually and run `npm install`:
+or pass through the command line
 
-    ```js
-    "devDependencies": {
-      "karma": ">=0.9",
-      "karma-osx-reporter": "*"
-    }
-    ```
-
-    If you install locally, you'll need to run Karma using `node_modules/karma/bin/karma`.
-
-  In any case, the plugin needs to be installed as a peer dependency to Karma (i.e. in the sibling folder). This just means you cannot use global Karma with local plugins or vice-versa.
-
-
-2. Add it as a reporter in the config file
-
-  ```js
-  reporters: ['progress', 'osx']
-  ```
-
-  or pass through the command line
-
-  ```sh
-  $ karma start --reporters=progress,osx karma.conf.js
-  ```
+```sh
+$ karma start --reporters=progress,osx karma.conf.js
+```
 
 ## Configuration
 
